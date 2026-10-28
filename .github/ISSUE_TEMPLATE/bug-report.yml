@@ -1,0 +1,85 @@
+name: Bug report
+description: Report a reproducible problem with a Charanko download, stream or type.
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Charanko. Please remove tokens, signed URLs, cookies and personal paths from any code or output you paste.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Plain HTTP download (retries, host or CDN fallback)
+        - HLS (variant choice, segments, AES-128, fMP4)
+        - Expired URLs and refresh()
+        - KVS function/N/ URLs
+        - Disk output (paths, .part files, finalize)
+        - Stream output (outputType 'STREAM')
+        - FFmpeg remux or transcode
+        - Errors and exception messages
+        - TypeScript types or package exports
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Charanko version
+      description: Run `npm ls charanko`.
+      placeholder: '0.1.0'
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Node.js, OS and FFmpeg
+      description: Node.js 22.12 or newer is required. Say whether you use the bundled ffmpeg-static or your own binary.
+      placeholder: 'Node 24.1.0, macOS 16, ffmpeg-static'
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: The smallest script that shows the problem. Describe the source (plain file, HLS master or media playlist, encrypted) instead of pasting a private URL.
+      render: ts
+      placeholder: |
+        import { Charanko } from 'charanko';
+
+        const charanko = Charanko.create();
+        await charanko.download({ url: 'https://example.com/video/master.m3u8' }, { outputType: 'DEVICE' });
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Expected and actual behavior
+      placeholder: "Expected…\nActual…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Error and output
+      description: Paste the thrown error, including its `code` and `context`, and any progress output.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I can reproduce this with the latest published version.
+          required: true
+        - label: I searched existing issues for this problem.
+          required: true

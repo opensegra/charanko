@@ -1,0 +1,36 @@
+{
+	"compilerOptions": {
+		"target": "ES2023",
+		"lib": ["ES2023", "DOM"],
+
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+
+		"strict": true,
+		"skipLibCheck": true,
+
+		"declaration": true,
+		"declarationMap": true,
+
+		"sourceMap": true,
+
+		"outDir": "dist",
+		"rootDir": ".",
+
+		"removeComments": false,
+
+		"allowSyntheticDefaultImports": true,
+
+		"strictNullChecks": true,
+
+		"forceConsistentCasingInFileNames": true,
+
+		"noImplicitAny": false,
+
+		"strictBindCallApply": false,
+		"noFallthroughCasesInSwitch": false,
+		"types": ["node"]
+	},
+	"include": ["src", "tests"],
+	"exclude": ["node_modules", "dist"]
+}

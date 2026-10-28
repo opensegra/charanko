@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+
+set -eEuo pipefail
+
+# Release types: major, minor, patch.
+RELEASE_TYPE="${1:-minor}"
+
+RELEASE_BRANCH="release/pending"
+RELEASE_TAG=""
+
+# Check required dependencies.
+check_dependencies() {
+    local dependencies=(git pnpm gh jq)
+
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" >/dev/null 2>&1; then
+            printf 'Required dependency is missing: %s\n' "$dep" >&2
+            return 1
+        fi
+    done
+}
+
+# Validate the requested release type.
+validate_release_type() {
+    case "$RELEASE_TYPE" in
+        major|minor|patch)
+			;;
+        *)
+            printf 'Invalid release type: %s (use major, minor, or patch)\n' "$RELEASE_TYPE" >&2
+            return 1
+            ;;
+    esac
+}
+
+# A. Preflight
+preflight() {
+    local current_branch
+    current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+    if [[ "$current_branch" != "main" ]]; then
+        printf 'Release must start from main.\n' >&2
+        return 1
+    fi
+
+    if [[ -n "$(git status --porcelain)" ]]; then
+        printf 'Working tree is not clean.\n' >&2
+        return 1
+    fi
+
+    printf 'Fetching latest updates from origin/main...\n'
+    git fetch origin main
+
+    local ahead behind
+    ahead="$(git rev-list --count origin/main..HEAD)"
+    behind="$(git rev-list --count HEAD..origin/main)"
+
+    if (( ahead > 0 )); then
+        printf 'Local main has %s unpushed commit(s).\n' "$ahead" >&2
+        return 1
+    fi
+
+    if (( behind > 0 )); then
+        printf 'Local main is behind origin/main by %s commit(s).\n' \
+            "$behind" >&2
+        return 1
+    fi
+}
+
+# B. Release preparation
+release_preparation() {
+    printf 'Creating release branch: %s\n' "$RELEASE_BRANCH"
+    git checkout -b "$RELEASE_BRANCH"
+
+    printf 'Bumping version (%s)...\n' "$RELEASE_TYPE"
+    pnpm exec standard-version \
+        --skip.tag \
+        --release-as "$RELEASE_TYPE"
+}
+
+# C. Determine release tag
+get_tag() {
+    local version
+
+    version="$(jq -er '.version | strings | select(length > 0)' package.json)"
+    RELEASE_TAG="v$version"
+
+    if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
+        printf 'Local tag already exists: %s\n' "$RELEASE_TAG" >&2
+        return 1
+    fi
+
+    if git ls-remote --exit-code --tags origin \
+        "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+        printf 'Remote tag already exists: %s\n' "$RELEASE_TAG" >&2
+        return 1
+    fi
+}
+
+# D. Open and merge release PR
+open_release_pr() {
+    local renamed_branch="release/$RELEASE_TAG"
+
+    printf 'Renaming release branch to %s...\n' "$renamed_branch"
+    git branch -m "$renamed_branch"
+
+    printf 'Pushing release branch...\n'
+    git push -u origin HEAD
+
+    printf 'Creating release PR...\n'
+    gh pr create \
+        --base main \
+        --head "$renamed_branch" \
+        --title "Release $RELEASE_TAG" \
+        --body "This pull request prepares release $RELEASE_TAG."
+
+    printf 'Squash-merging release PR...\n'
+    gh pr merge --squash --delete-branch
+}
+
+# E. Tag the merged release
+tag_release() {
+    printf 'Switching to main...\n'
+    git checkout main
+
+    printf 'Updating main...\n'
+    git pull --ff-only origin main
+
+    # Confirm the version bump reached the merged main branch.
+    local merged_version
+    merged_version="$(git show HEAD:package.json |
+        jq -er '.version | strings | select(length > 0)')"
+
+    if [[ "v$merged_version" != "$RELEASE_TAG" ]]; then
+        printf 'Merged version mismatch: expected %s, found v%s\n' \
+            "$RELEASE_TAG" "$merged_version" >&2
+        return 1
+    fi
+
+    # Do not overwrite an existing local or remote tag.
+    if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
+        printf 'Local tag already exists: %s\n' "$RELEASE_TAG" >&2
+        return 1
+    fi
+
+    if git ls-remote --exit-code --tags origin \
+        "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+        printf 'Remote tag already exists: %s\n' "$RELEASE_TAG" >&2
+        return 1
+    fi
+
+    printf 'Creating annotated tag %s...\n' "$RELEASE_TAG"
+    git tag -a "$RELEASE_TAG" -m "$RELEASE_TAG"
+
+    printf 'Pushing tag...\n'
+    git push origin "$RELEASE_TAG"
+}
+
+main() {
+    check_dependencies
+    validate_release_type
+    preflight
+    release_preparation
+    get_tag
+    open_release_pr
+    tag_release
+
+    printf '\n%s is tagged on main.\n' "$RELEASE_TAG"
+    printf 'Publish to npm with: pnpm run publish:npm\n'
+    printf 'Publish GitHub release with: pnpm run publish:github\n'
+}
+
+main "$@"

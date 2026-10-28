@@ -1,0 +1,59 @@
+name: Feature request
+description: Suggest a focused improvement to Charanko.
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem first, then the feature. Charanko moves media; finding media on a site belongs in the app or a `TransferStrategy`, not in the engine.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - HTTP transport
+        - HLS
+        - Strategies and refreshes
+        - Disk or stream output
+        - FFmpeg
+        - Errors
+        - TypeScript types or packaging
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: What are you trying to download, and where does the current API get in the way?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API or behavior
+      description: Show how you would call it and what it would return.
+      render: ts
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any current workaround, such as a custom `TransferStrategy` or the clients used directly.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: This fits the existing options or a `TransferStrategy` instead of adding a new class.
+        - label: I searched existing issues and feature requests.
+          required: true

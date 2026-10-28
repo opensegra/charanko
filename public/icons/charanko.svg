@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="charanko">
+	<title>charanko</title>
+	<defs>
+		<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#161d27"/>
+			<stop offset="1" stop-color="#0b1016"/>
+		</linearGradient>
+		<linearGradient id="brand" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#00d7d7"/>
+			<stop offset="1" stop-color="#00d787"/>
+		</linearGradient>
+	</defs>
+
+	<!-- tile -->
+	<rect x="8" y="8" width="496" height="496" rx="104" fill="url(#bg)"/>
+	<rect x="8" y="8" width="496" height="496" rx="104" fill="none" stroke="#263241" stroke-width="4"/>
+
+	<!-- segments arriving, fading in -->
+	<rect x="214" y="72" width="84" height="34" rx="12" fill="#3a4757"/>
+	<rect x="214" y="122" width="84" height="34" rx="12" fill="#00d7d7" opacity="0.45"/>
+	<rect x="214" y="172" width="84" height="34" rx="12" fill="#00d7d7" opacity="0.75"/>
+	<rect x="214" y="222" width="84" height="34" rx="12" fill="#00d7d7"/>
+
+	<!-- arrowhead stitching them into one stream -->
+	<path d="M128 282 H384 L256 398 Z" fill="url(#brand)" stroke="url(#brand)" stroke-width="24" stroke-linejoin="round"/>
+
+	<!-- the finished file -->
+	<rect x="120" y="428" width="272" height="20" rx="10" fill="#00d787"/>
+</svg>

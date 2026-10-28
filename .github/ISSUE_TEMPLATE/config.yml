@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/opensegra/charanko#readme
+    about: Setup, output types, strategies, refreshes and errors.
+  - name: npm package
+    url: https://www.npmjs.com/package/charanko
+    about: Published versions and install instructions.
