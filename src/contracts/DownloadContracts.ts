@@ -1,5 +1,5 @@
 import { type Readable, type Writable } from 'stream';
-import { type InumakiProgress } from '../../../inumaki/dist';
+import { type InumakiProgress } from 'inumaki';
 import { type TransferStrategy } from '../base/TransferStrategy';
 import { type OutputType, type VideoQuality } from '../types';
 import { type HttpFetchOptions } from './HttpContracts';

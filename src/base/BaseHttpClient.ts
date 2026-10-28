@@ -1,7 +1,7 @@
 import { checkServerIdentity } from 'tls';
 import { Agent, type Dispatcher, type Headers, ProxyAgent, fetch as undiciFetch } from 'undici';
 import { brotliDecompressSync, gunzipSync, inflateSync } from 'zlib';
-import { type InumakiProgress } from '../../../inumaki/dist';
+import { type InumakiProgress } from 'inumaki';
 import { HEADER_PRESETS } from '../constants/headers';
 import { type DownloadOptions, type HttpAgentOptions, type HttpFetchOptions } from '../contracts';
 

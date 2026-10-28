@@ -1,7 +1,7 @@
 import { posix } from 'path';
 import { PassThrough } from 'stream';
 import { finished } from 'stream/promises';
-import { InumakiProgress } from '../../../inumaki/dist';
+import { InumakiProgress } from 'inumaki';
 import { TransferStrategy } from '../base/TransferStrategy';
 import { HlsClient } from '../client/HlsClient';
 import { StreamHttpClient } from '../client/StreamHttpClient';

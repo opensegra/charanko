@@ -3,4 +3,4 @@ onlyBuiltDependencies:
 
 # uses the local logger until inumaki is on npm; remove after publishing it
 overrides:
-  'inumaki': link:../segra-logger
+  inumaki: link:../inumaki

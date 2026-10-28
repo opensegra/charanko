@@ -1,7 +1,7 @@
 import { Readable, Transform, type Writable } from 'stream';
 import { pipeline } from 'stream/promises';
 import { type Response as UndiciResponse } from 'undici';
-import { type InumakiProgress } from '../../../inumaki/dist';
+import { type InumakiProgress } from 'inumaki';
 import { BaseHttpClient } from '../base/BaseHttpClient';
 import { type TransferStrategy } from '../base/TransferStrategy';
 import { type DownloadOptions, type StreamRequest } from '../contracts';
