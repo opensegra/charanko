@@ -3,7 +3,7 @@ import ffmpegPath from 'ffmpeg-static';
 import { accessSync, constants, promises as fs } from 'fs';
 import path from 'path';
 import { promisify } from 'util';
-import { type InumakiProgress } from '../../../inumaki/dist';
+import { type InumakiProgress } from 'inumaki';
 import { type FinalizedMedia, type RemuxPipe, type TranscodeOptions } from '../contracts';
 
 const execFileAsync = promisify(execFile);

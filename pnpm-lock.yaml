@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  inumaki: link:../segra-logger
+  inumaki: link:../inumaki
 
 importers:
 
@@ -15,8 +15,8 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
       inumaki:
-        specifier: link:../segra-logger
-        version: link:../segra-logger
+        specifier: link:../inumaki
+        version: link:../inumaki
       undici:
         specifier: ^8.12.3
         version: 8.12.3

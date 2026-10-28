@@ -1,7 +1,7 @@
 import { createDecipheriv } from 'crypto';
 import { once } from 'events';
 import { Readable, type Writable } from 'stream';
-import { type InumakiProgress } from '../../../inumaki/dist';
+import { type InumakiProgress } from 'inumaki';
 import { BaseHttpClient } from '../base/BaseHttpClient';
 import { type DownloadOptions, type HlsKey, type HlsSegment, type HlsVariant, type ResolvedPlaylist } from '../contracts';
 import { qualityToHeight } from '../utils';
