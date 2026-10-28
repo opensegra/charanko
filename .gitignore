@@ -70,3 +70,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 !CHANGELOG.md
 *.txt
 
+tests/*.ts
