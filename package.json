@@ -1,6 +1,6 @@
 {
 	"name": "charanko",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Media download engine for Node: HTTP and HLS streams with fallbacks, AES-128, KVS links and FFmpeg remux, to disk or as a stream",
 	"keywords": [
 		"charanko",
